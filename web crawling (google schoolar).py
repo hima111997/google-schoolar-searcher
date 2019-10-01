@@ -22,52 +22,112 @@ def main(url,page):
     '''openening the first 10 files in a google schoolar Url'''
     def opener(com_url_pages,soup):
         
-        '''openning the first page'''
+        '''openning the the researches in the first page'''
+        
         for i in soup.find_all(id ='gs_res_ccl_mid'):
             for p in i.find_all('a'):
                 if p.get('href').startswith('http'):
                     #print(p.get('href'))
                     if p.get('href').endswith('.pdf'):
-                        print ('there are some pdf files ', p.get('href'))
+                        print ('\nthere are some pdf files\n ', p.get('href')) # prints the link for PDFs
                     else: 
-                        time.sleep(10)
-                        webbrowser.open(p.get('href'))
+                        time.sleep(5)
+                        webbrowser.open(p.get('href')) 
         
-        '''openning the rest of pages'''
+        '''openning the rest of pages upob user request'''
         for i in com_url_pages:
+            open_next = input('do you want to see the next page?\n\
+1 for yes\n\
+2 for no\n')
+            if open_next =='1':
+                pass
+            elif open_next =='2':
+                return open_next
             r = requests.get(i).text
             soup = BeautifulSoup(r,'html.parser')
+            #print(com_url_pages)
             for i in soup.find_all(id ='gs_res_ccl_mid'):
                 for p in i.find_all('a'):
                     if p.get('href').startswith('http'):
                     #print(p.get('href'))
                         if p.get('href').endswith('.pdf'):
-                            print ('there are some pdf files ', p.get('href'))
+                            print ('\nthere are some pdf files\n ', p.get('href'))
                         else: 
-                            time.sleep(10)
+                            time.sleep(5)
                             webbrowser.open(p.get('href'))
         
-    
+    ''' find and create a list of pages URL'''
     for i in soup.find_all(id ='gs_n'):
         for p in i.find_all('a'):
             url.append(p.get('href'))
             
     set_lis_url_pages = list(set(url))
-    set_lis_url_pages.sort()
-    print(set_lis_url_pages)
+    set_lis_url_pages.sort() # this list contains the URL pages (not complete URLs)
+    #print(set_lis_url_pages)
     com_url_pages = []
+    
+    '''creating the full URL address'''
     for url in set_lis_url_pages:
         link = urllib.parse.urljoin('https://scholar.google.com/', url)
         com_url_pages.append(link)
     #for i in set_lis_url:
-    opener(com_url_pages,soup)
+    open_next = opener(com_url_pages,soup)
+    return open_next
     
-        #webbrowser.open
-    #url =set()
-    print('please go to page number {}'.format(page+6))
-    
+       
     
 while True:
-    main(url,page)
+    open_next = main(url,page)
     page+=7
+    print(open_next)
+    if open_next == '2':
+        break
     
+'''
+com_url =[]
+next_url = []
+
+r = requests.get(url[0]).text
+soup = BeautifulSoup(r,'html.parser')
+print(1)
+''for i in soup.find_all(id ='gs_n'):
+    for p in i.find_all('a'):
+        if p.get('href').startswith('http'):
+            
+                    #print(p.get('href'))
+            if p.get('href').endswith('.pdf'):
+                #print ('there are some pdf files ', p.get('href'))
+                print(0)
+            else: 
+                #time.sleep(10)
+                print(p.get('href'))
+                
+                link = urllib.parse.urljoin('https://scholar.google.com/', p.get('href'))
+                com_url.append(link)
+                
+                #webbrowser.open(p.get('href'))    
+                        
+for i in com_url:
+    if i >url[0]:
+        next_url.append(i)
+print(next_url)''
+
+
+for i in soup.find_all(id ='gs_n'):
+    for p in i.find_all('a'):
+        print(p.get('href'))
+        link = urllib.parse.urljoin('https://scholar.google.com/', p.get('href'))
+        com_url.append(link)
+        
+    else:
+        continue
+        #url.append(p.get('href'))
+com_url = list(set(com_url))
+print(com_url, type(com_url))
+for i in com_url:
+    if i > url[0]:
+        #print(i)
+        next_url.append(i)
+    else:
+        continue
+print(next_url)'''
