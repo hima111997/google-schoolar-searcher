@@ -24,7 +24,7 @@ made by ibrahim mohamed
 thanks to Ali Osama Hassan for his help and advice
 
 ## Future updates
-making the progrm opens the rest of the pages after page 10 automatically
+making the progrm opens the rest of the pages after page 10 automatically (nearly completed)
 
 ## Contact Info
 email: hima_bioph199799@yahoo.com
