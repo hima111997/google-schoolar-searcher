@@ -141,19 +141,14 @@ def main(url,page):
         list_of_keys.sort()
         for i in range(len(list_of_keys)):
             com_url_pages[i] = dic_com_url_pages[list_of_keys[i]]
-        
-            
-        
-'''future update: 
+        '''future update: 
     1- opening the number of pages entered only
     2- dont repeat the opened research'''
-        
         #removal = len(com_url_pages) - num_pages + 1
         
         #for i in range(removal):
          #   del(com_url_pages[-1])
-        
-        open_next = opener(com_url_pages,soup)
+        open_next = opener(com_url_pages, soup)
         return open_next
     open_next = opener(com_url_pages,soup)
     return open_next
