@@ -23,7 +23,7 @@ def main(url,page):
         for i in soup.find_all(id ='gs_res_ccl_mid'):
             for p in i.find_all('a'):
                 if p.get('href').startswith('http'):
-                    #print(p.get('href'))
+                    
                     if p.get('href').endswith('.pdf'):
                         print ('\nthere are some pdf files\n ', p.get('href')) # prints the link for PDFs
                     else: 
@@ -40,6 +40,7 @@ def main(url,page):
                 page_number+=1
                 pass
             elif open_next =='2':
+                
                 return open_next
             r = requests.get(i).text
             soup = BeautifulSoup(r,'html.parser')
@@ -65,7 +66,7 @@ def main(url,page):
         for i in soup.find_all(id ='gs_res_ccl_mid'):
             for p in i.find_all('a'):
                 if p.get('href').startswith('http'):
-                    #print(p.get('href'))
+                    
                     if p.get('href').endswith('.pdf'):
                         print ('\nthere are some pdf files\n ', p.get('href')) # prints the link for PDFs
                     else: 
@@ -75,7 +76,7 @@ def main(url,page):
         
     if 1 < num_pages <= 10:
         for i in soup.find_all(id ='gs_n'):
-            #print (i)
+            
             for p in i.find_all('a'):
                 url.append(p.get('href'))
                 
@@ -95,7 +96,7 @@ def main(url,page):
     
     if num_pages > 10:
         for i in soup.find_all(id ='gs_n'):
-            #print (i)
+            
             for p in i.find_all('a'):
                 url.append(p.get('href'))
                 
@@ -106,22 +107,22 @@ def main(url,page):
             link = urllib.parse.urljoin('https://scholar.google.com/', set_lis_url_pages[num])
             com_url_pages.append(link)
         
-        #print(com_url_pages, len(com_url_pages))
+        
         
         repetitions = (num_pages - 10)/4
         if int(repetitions) < repetitions:
             repetitions = int(repetitions) + 1
-        #print (repetitions)
+        
         for i in range(repetitions):            
             r = requests.get(com_url_pages[-1]).text
             soup_10 = BeautifulSoup(r,'html.parser')
             after_10 = []
             
             for i in soup_10.find_all(id ='gs_n'):
-            #print (i)
+            
                 for p in i.find_all('a'):
                     after_10.append(p.get('href'))
-                    #print (p.get('href'))
+                    
                 for url in range(len(after_10)):
                     link = urllib.parse.urljoin('https://scholar.google.com/', after_10[url])
                     if link not in com_url_pages:
@@ -129,16 +130,31 @@ def main(url,page):
                     else:
                         continue
         com_url_pages = list(set(com_url_pages))
-        '''future update:
-            1- creating dict containing the part of the url that indicates the page number (key), url(value)
-            2- creating list having only the keys sorted
-            3- modifiying the original list com_url_pages so that its pages are ordered'''
+        com_url_pages.sort()
+        dic_com_url_pages = {}
+        
+        for i in com_url_pages:
+            num_start = i.find('=')+1
+            num_end = i.find('&')
+            dic_com_url_pages[int(i[num_start:num_end])]= i
+        list_of_keys = [i for i in dic_com_url_pages]
+        list_of_keys.sort()
+        for i in range(len(list_of_keys)):
+            com_url_pages[i] = dic_com_url_pages[list_of_keys[i]]
+        
+            
+        
+'''future update: 
+    1- opening the number of pages entered only
+    2- dont repeat the opened research'''
+        
         #removal = len(com_url_pages) - num_pages + 1
         
         #for i in range(removal):
          #   del(com_url_pages[-1])
         
         open_next = opener(com_url_pages,soup)
+        return open_next
     open_next = opener(com_url_pages,soup)
     return open_next
     
@@ -147,7 +163,7 @@ def main(url,page):
 while True:
     open_next = main(url,page)
     page+=7
-    #print(open_next)
+    
     if open_next == '2':
         break
     
